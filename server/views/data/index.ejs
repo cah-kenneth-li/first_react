@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Prototype</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4"> Current Health Data: </h1>
+        <a href="/data/new" class="btn btn-primary"> Enter New Data</a>
+        <a href="/data/delete" class="btn btn-danger"> Delete Data</a>
+        <a href="/" class="btn btn-info"> Back </a>
+        <% data.forEach( datum => { %>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h4 class="card-title"><%= datum.first_name +", "+ datum.last_name %></h4>
+                    <div class="card-subtitle text-muted mb-2">
+                        <%= datum.email %>
+                    </div>
+                    <div class="card-text"> <%= "Age: "+datum.age %> </div>
+                    <div class="card-text mb-2"> <%="Social security number: "+datum.ssn%> </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+</body>
+</html>

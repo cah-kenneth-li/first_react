@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Prototype</title>
+    <style>
+        .test-button {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border: 2px solid black;
+                background-color: white;
+                color: black;
+                display: block;
+                cursor: pointer;
+            }
+
+        .test-button:hover{
+            background-color: green;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form action="/data/register" method="POST">
+        <!-- will use a similar form to edit data, so include it in separate file -->
+        <div class="form-group">
+            <label for="username"> Username: </label>
+            <input required value="<%= locals.username%>" type="text" name = "username" id="username" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="password"> Password: </label>
+            <input required type="text" name = "password" id="password" class="form-control">
+        </div>
+
+        <a href="/" class="btn btn-secondary"> Cancel </a>
+        <button type="submit" class="btn btn-primary"> Register </button>
+    </form>
+
+    <% if(locals.username!='' && locals.username!="undefined" && locals.username){ %>
+        <% if (locals.success){%>
+            <p class="text-success"> <%= locals.success + " " + locals.username%></p>
+        <% } %>
+
+        <% if (locals.failure){%>
+            <p class="text-danger"> <%= locals.failure + " " + locals.username%></p>
+            <p class="text-danger"> <%= locals.error %></p>
+        <% } %>
+    <% } %>
+
+</div>
+
+</body>
+</html>
