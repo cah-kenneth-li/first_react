@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
-  
+
   //these prevent back arrowing into sensitive fields once logged out
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   res.header('Expires', '-1');
@@ -49,7 +49,15 @@ app.use(function (req, res, next) {
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
   //if already logged in, redirects to home
-  res.render('data/login', {})
+  // res.render('data/login', {})
+  console.log("Logged in")
+  try{
+    console.log("in try statement")
+    res.redirect('http://localhost:3000/about')
+  } catch (e) {
+    next()
+    console.log(e)
+  }
 })
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
@@ -65,7 +73,8 @@ app.get('/', checkAuthenticated, async (req, res) => {
       // console.log(req.user.username)
       // console.log("end of app comments")
       // main page once logged in
-      res.render('data/home', {username: req.user.username})
+      res.redirect('http://localhost:3000/about')
+      // res.render('data/home', {username: req.user.username})
     } catch (e) {
       next()
       console.log(e)
@@ -108,7 +117,9 @@ function checkAuthenticated(req, res, next) {
 }
 
 function checkNotAuthenticated(req, res, next) {
+  console.log("checkNotAuthenticated()")
   if (req.isAuthenticated()) {
+    console.log("is authenticated from check if not function")
     return res.redirect('/')
   }
   next()

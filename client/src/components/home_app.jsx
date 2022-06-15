@@ -1,14 +1,14 @@
 import React from "react";
 
-function About() {
+function home_app() {
   return (
-    <div className="about">
-      <div class="container">
-        <div class="row align-items-center my-5">
-          <div class="col-lg-7">
+    <div className="home">
+      <div className="container">
+        <div className="row align-items-center my-5">
+          <div className="col-lg-7">
           </div>
-          <div class="col-lg-5">
-            <h1 class="font-weight-light">About</h1>
+          <div className="col-lg-5">
+            <h1 className="font-weight-light">Home page</h1>
             <p>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
@@ -22,4 +22,4 @@ function About() {
   );
 }
 
-export default About;
+export default home_app;

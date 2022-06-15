@@ -7,23 +7,27 @@ const { getAllUsers } = require('./user_database')
 function initialize(passport){
     const authenticateUser = async (username, password, done) => {
         try{
+            console.log("got here")
             const user = await getUserByUsername(username)
             // console.log(user)
             // console.log(user.username)
             // console.log(user.password)
 
             if(user==null){
-            //   console.log('user was not found')
+              console.log('user was not found')
               return done(null, false, {message: 'No user with that username'})
             }
 
             if (await bcrypt.compare(password, user.password)){
-                // console.log(user)
+                console.log(user)
                 return done(null, user)
             } else{
+                console.log("password incorrect")
                 return done(null, false, { message: 'Password Incorrect'})
             }
         } catch(e) {
+            console.log("caught error")
+            console.log(e)
             return done(e)
         }
 

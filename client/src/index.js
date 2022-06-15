@@ -9,8 +9,10 @@ import {
   Footer,
   Home,
   About,
+  Login,
 } from "./components";
 
+console.log("index.js")
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -19,6 +21,7 @@ root.render(
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
     <Footer />
   </Router>,
