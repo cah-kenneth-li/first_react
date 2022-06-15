@@ -22,12 +22,12 @@ function initialize(passport){
                 console.log(user)
                 return done(null, user)
             } else{
-                console.log("password incorrect")
+                // console.log("password incorrect")
                 return done(null, false, { message: 'Password Incorrect'})
             }
         } catch(e) {
-            console.log("caught error")
-            console.log(e)
+            // console.log("caught error")
+            // console.log(e)
             return done(e)
         }
 

@@ -35,14 +35,16 @@ app.set('view engine', 'ejs')
 
 app.use(function (req, res, next) {
   //might not need these first three unless using a local react app running on port 3000
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
 
   //these prevent back arrowing into sensitive fields once logged out
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   res.header('Expires', '-1');
   res.header('Pragma', 'no-cache');
+
+  res.header("Access-Control-Allow-Credentials", 'true');
 
   next();
 });
@@ -50,19 +52,13 @@ app.use(function (req, res, next) {
 app.get('/login', checkNotAuthenticated, (req, res) => {
   //if already logged in, redirects to home
   // res.render('data/login', {})
-  console.log("Logged in")
-  try{
-    console.log("in try statement")
-    res.redirect('http://localhost:3000/about')
-  } catch (e) {
-    next()
-    console.log(e)
-  }
+  console.log("not Logged in")
+  res.redirect('http://localhost:3000/about')
 })
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/login',
+  failureRedirect: 'http://localhost:3001/login',
   failureFlash: true
 }))
 
@@ -107,7 +103,7 @@ app.listen(port, () => {
 app.use('/data', dataRouter)
 
 function checkAuthenticated(req, res, next) {
-  // console.log("checking if authenticated")
+  console.log("checking if authenticated")
   if (req.isAuthenticated()) {
     // console.log("This session is authenticated in server.js")
     return next()
@@ -120,7 +116,7 @@ function checkNotAuthenticated(req, res, next) {
   console.log("checkNotAuthenticated()")
   if (req.isAuthenticated()) {
     console.log("is authenticated from check if not function")
-    return res.redirect('/')
+    return res.redirect('http://localhost:3000/about')
   }
   next()
 }

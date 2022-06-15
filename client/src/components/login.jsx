@@ -5,37 +5,37 @@ function Login(){
 
 
     return(
-        <div className="container">
-            <div className="form-group">
-                 <label for="username"> Username: </label>
-                 <input required type="text" name = "username" id="username" className="form-control"/>
-             </div>
+        // <div className="container">
+        //     <div className="form-group">
+        //          <label for="username"> Username: </label>
+        //          <input required type="text" name = "username" id="username" className="form-control"/>
+        //      </div>
 
-             <div className="form-group">
-                 <label for="password"> Password: </label>
-                 <input required type="password" name = "password" id="password" className="form-control"/>
-             </div>
+        //      <div className="form-group">
+        //          <label for="password"> Password: </label>
+        //          <input required type="password" name = "password" id="password" className="form-control"/>
+        //      </div>
 
-             <button type="submit" onClick={() => test()} className="btn btn-primary"> Log In </button>
+        //      <button type="submit" onClick={() => test()} className="btn btn-primary"> Log In </button>
 
-        </div>
-    // <div class="container" id="loginform">
-    //     <form action="http://localhost:3001/login" method="POST">
-    //         <div class="form-group">
-    //             <label for="username"> Username: </label>
-    //             <input required type="text" name = "username" id="username" class="form-control"/>
-    //         </div>
+        // </div>
+    <div class="container" id="loginform">
+        <form action="http://localhost:3001/login" method="POST">
+            <div class="form-group">
+                <label for="username"> Username: </label>
+                <input required type="text" name = "username" id="username" class="form-control"/>
+            </div>
             
-    //         <div class="form-group">
-    //             <label for="password"> Password: </label>
-    //             <input required type="password" name = "password" id="password" class="form-control"/>
-    //         </div>
+            <div class="form-group">
+                <label for="password"> Password: </label>
+                <input required type="password" name = "password" id="password" class="form-control"/>
+            </div>
     
-    //         <a href="/data/registerForm" class="btn btn-secondary"> Register </a>
-    //         <button type="submit" class="btn btn-primary"> Log In </button>
-    //     </form>
-    //     {/* add in the danger text */}
-    // </div>
+            <a href="/data/registerForm" class="btn btn-secondary"> Register </a>
+            <button type="submit" class="btn btn-primary"> Log In </button>
+        </form>
+        {/* add in the danger text */}
+    </div>
 
     );
 }
@@ -50,17 +50,21 @@ function test(body) {
     //let {username, password} = body;
     fetch("http://localhost:3001/login", {
         method: "POST",
-        redirect: 'follow',
+        // redirect: 'follow',
         body: JSON.stringify({
             username: username,
             password: password
-        })
+        }),
 
-    }).then(response=> {
+        credentials: 'include', 
+    }).then(response => {
         console.log("This is the response returned:")
         console.log(response)
         //redirects according to response of the fetch request
-        window.location.href = response.url;
+        if(response.redirected){
+            // window.location.href = response.url;
+        }
+        
         
     }).catch(function(err) {
         console.log(err)
