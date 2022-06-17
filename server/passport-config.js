@@ -14,12 +14,12 @@ function initialize(passport){
             // console.log(user.password)
 
             if(user==null){
-              console.log('user was not found')
+            //   console.log('user was not found')
               return done(null, false, {message: 'No user with that username'})
             }
 
             if (await bcrypt.compare(password, user.password)){
-                console.log(user)
+                // console.log(user)
                 return done(null, user)
             } else{
                 // console.log("password incorrect")
@@ -27,7 +27,7 @@ function initialize(passport){
             }
         } catch(e) {
             // console.log("caught error")
-            // console.log(e)
+            console.log(e)
             return done(e)
         }
 

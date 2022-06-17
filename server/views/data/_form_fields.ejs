@@ -1,7 +1,7 @@
 <!-- Form for adding users into our database -->
 <div class="form-group">
     <label for="first_name"> First Name </label>
-    <input required value="<%= person.first_name%>" type="text" name = "first_name" id="first_name" class="form-control">
+    <input required value="<%= person.firstName%>" type="text" name = "first_name" id="first_name" class="form-control">
 </div>
 
 <div class="form-group">
@@ -21,10 +21,7 @@
 
 <div class="form-group">
     <label for="ssn"> Social Security Number </label>
-    <br>
-    <input required type="text" name = "ssn" id="ssn" maxlength="3">-
-    <input required type="text" name = "ssn2" id="ssn2" maxlength="2">-
-    <input required type="text" name = "ssn3" id="ssn3" maxlength="4">
+    <input required type="text" name = "ssn" id="ssn" maxlength="42">-
 </div>
 <a href="/" class="btn btn-secondary"> Cancel </a>
 <button type="submit" class="btn btn-primary"> Save </button>

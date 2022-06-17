@@ -1,21 +1,29 @@
 const {Pool, Client} = require('pg')
 const pool = new Pool({
-  user: 'postgres',
-  host: '10.49.216.178',
-  database: 'test',
-  password: '.eBRbM-$^*iTlMM"',
+  user: 'test',
+  host: 'localhost',
+  database: 'firstdb',
+  password: 'test',
   port: 5432,
 });
 
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: '10.49.216.178',
+//   database: 'test',
+//   password: '.eBRbM-$^*iTlMM"',
+//   port: 5432,
+// });
+
 //handles adding, getting, and querying information from users database
-let db_name = "first_patient"
+let db_name = "first_users"
 
 pool.connect()
 
 const getAllUsers = () => {
     return new Promise(function(resolve, reject) {
       pool.query('select * from '+db_name, (error, results) => {
-        // console.log(error, results)
+        //console.log(error, results)
         if (error) {
           //alert("Did not get any merchants!")
           reject(error)
@@ -31,23 +39,23 @@ const getAllUsers = () => {
 
 const addUser = (body) => {
   return new Promise( function(resolve, reject) {
-    const { firstName, lastName, dob, login_id, etheriumAddress } = body
-    pool.query('INSERT INTO public.' +db_name+ ' ("firstName", "lastName", dob, login_id, "etheriumAddress") VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5) RETURNING *', [firstName, lastName, dob, login_id, etheriumAddress], (error, results) => {
+    const { first_name, last_name, ssn, email, age } = body
+    pool.query('INSERT INTO ' +db_name+ ' (first_name, last_name, ssn, email, age) VALUES ($1, $2, $3, $4, $5) RETURNING *', [first_name, last_name, ssn, email, age], (error, results) => {
       if (error) {
         reject(error)
       }
-      // console.log(results)
       resolve(results.rows[0])
     })
   })
 }
 
 
-  const deleteUser = (body) => {
+
+  const deleteUser = (ssn_passed) => {
     return new Promise(function(resolve, reject) {
-      const PK = body;
+      const ssn = ssn_passed;
       // console.log("username we are trying to delete: "+ ssn);
-      pool.query('DELETE FROM '+ db_name +' patient_id = $1', [PK], (error, results) => {
+      pool.query('DELETE FROM '+ db_name +' WHERE ssn = $1', [ssn], (error, results) => {
         if (error) {
           console.log("User database delete error: " + error);
           reject(error)
@@ -60,41 +68,21 @@ const addUser = (body) => {
   const getUser = (body) => {
     return new Promise(function (resolve, reject) {
       const  { PK } = body
-      pool.query('SELECT FROM ' + db_name + 'WHERE patient_id = $1', [PK], (error, results) => {
+      pool.query('SELECT FROM ' + db_name + 'WHERE ssn = $1', [PK], (error, results) => {
         if(error) {
           console.log("User database delete error: " + error)
           reject(error)
         }
-        // console.log(results)
+        console.log(results)
         resolve(results.rows[0])
       })
     })
   }
-
-async function test(){
-  try{
-    await addUser( {
-      firstName: "dasfd",
-      lastName: "testd",
-      dob: Date.now(),
-      login_id: 123,
-      etheriumAddress: "asdfd",
-    })
-    console.log("date.now = " + Date.now())
-    let what = await getAllUsers();
-    console.log("translated date: "+what[0].dob.toLocaleString())
-  } catch (e) {
-    console.log("caught error")
-    console.log(e)
-  }
-}
-
-//test()
-
-
+  
   module.exports = {
     getAllUsers,
     addUser,
     deleteUser,
     getUser,
   }
+  

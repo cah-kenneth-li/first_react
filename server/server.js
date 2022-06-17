@@ -18,6 +18,7 @@ const methodOverride = require('method-override')
 const initializePassport = require('./passport-config')
 const login_connect = require('./login_database')
 
+
 initializePassport(passport)
 
 app.use(express.urlencoded({extended: false}))
@@ -52,14 +53,21 @@ app.use(function (req, res, next) {
 app.get('/login', checkNotAuthenticated, (req, res) => {
   //if already logged in, redirects to home
   // res.render('data/login', {})
-  console.log("not Logged in")
-  res.redirect('http://localhost:3000/about')
+  //console.log("not Logged in")
+  // res.cookie('message', "test")
+
+  //req.session.messages will be an array of strings in our case
+  // console.log(req.session.messages)
+  // console.log(req.session.messages.length)
+  res.cookie('message', req.session.messages.pop())
+  res.redirect('http://localhost:3000/login')
 })
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: 'http://localhost:3001/login',
-  failureFlash: true
+  failureFlash: true,
+  failureMessage: true,
 }))
 
 //initial rendering printing out everything in database 
@@ -103,7 +111,7 @@ app.listen(port, () => {
 app.use('/data', dataRouter)
 
 function checkAuthenticated(req, res, next) {
-  console.log("checking if authenticated")
+  // console.log("checking if authenticated")
   if (req.isAuthenticated()) {
     // console.log("This session is authenticated in server.js")
     return next()
@@ -113,9 +121,10 @@ function checkAuthenticated(req, res, next) {
 }
 
 function checkNotAuthenticated(req, res, next) {
-  console.log("checkNotAuthenticated()")
+  // console.log("checkNotAuthenticated()")
+
   if (req.isAuthenticated()) {
-    console.log("is authenticated from check if not function")
+    // console.log("is authenticated from check if not function")
     return res.redirect('http://localhost:3000/about')
   }
   next()

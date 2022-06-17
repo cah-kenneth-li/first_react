@@ -1,8 +1,17 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import Cookies from 'js-cookie';
 
-function Login(){
+export default function Login(){
     console.log('login.jsx loaded')
 
+    const [message, setMessage] = useState("");
+
+
+    
+    useEffect( () => {
+        setMessage(Cookies.get('message'))
+    }, [])
 
     return(
         // <div className="container">
@@ -19,56 +28,55 @@ function Login(){
         //      <button type="submit" onClick={() => test()} className="btn btn-primary"> Log In </button>
 
         // </div>
-    <div class="container" id="loginform">
+    <div className="container" id="loginform">
         <form action="http://localhost:3001/login" method="POST">
-            <div class="form-group">
-                <label for="username"> Username: </label>
-                <input required type="text" name = "username" id="username" class="form-control"/>
+            <div className="form-group">
+                <label htmlFor="username"> Username: </label>
+                <input required type="text" name = "username" id="username" className="form-control"/>
             </div>
             
-            <div class="form-group">
-                <label for="password"> Password: </label>
-                <input required type="password" name = "password" id="password" class="form-control"/>
+            <div className="form-group">
+                <label htmlFor="password"> Password: </label>
+                <input required type="password" name = "password" id="password" className="form-control"/>
             </div>
     
-            <a href="/data/registerForm" class="btn btn-secondary"> Register </a>
-            <button type="submit" class="btn btn-primary"> Log In </button>
+            <a href="/data/registerForm" className="btn btn-secondary"> Register </a>
+            <button type="submit" className="btn btn-primary"> Log In </button>
         </form>
         {/* add in the danger text */}
+        <p className="text-danger"> {message} </p>
     </div>
 
     );
 }
 
-function test(body) {
-    let username = document.getElementById("username").value;
-    console.log(username);
+// function test(body) {
+//     let username = document.getElementById("username").value;
+//     console.log(username);
 
-    let password = document.getElementById("password").value;
-    console.log(password);
+//     let password = document.getElementById("password").value;
+//     console.log(password);
 
-    //let {username, password} = body;
-    fetch("http://localhost:3001/login", {
-        method: "POST",
-        // redirect: 'follow',
-        body: JSON.stringify({
-            username: username,
-            password: password
-        }),
+//     //let {username, password} = body;
+//     fetch("http://localhost:3001/login", {
+//         method: "POST",
+//         // redirect: 'follow',
+//         body: JSON.stringify({
+//             username: username,
+//             password: password
+//         }),
 
-        credentials: 'include', 
-    }).then(response => {
-        console.log("This is the response returned:")
-        console.log(response)
-        //redirects according to response of the fetch request
-        if(response.redirected){
-            // window.location.href = response.url;
-        }
+//         credentials: 'include', 
+//     }).then(response => {
+//         console.log("This is the response returned:")
+//         console.log(response)
+//         //redirects according to response of the fetch request
+//         if(response.redirected){
+//             // window.location.href = response.url;
+//         }
         
         
-    }).catch(function(err) {
-        console.log(err)
-    })
-}
-
-export default Login;
+//     }).catch(function(err) {
+//         console.log(err)
+//     })
+// }

@@ -1,12 +1,22 @@
 const {Pool, Client} = require('pg')
 const bcrypt = require ('bcrypt');
 const pool = new Pool({
-  user: 'postgres',
-  host: '10.49.216.178',
-  database: 'test',
-  password: '.eBRbM-$^*iTlMM"',
+  user: 'test',
+  host: 'localhost',
+  database: 'firstdb',
+  password: 'test',
   port: 5432,
 });
+
+
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: '10.49.216.178',
+//   database: 'test',
+//   password: '.eBRbM-$^*iTlMM"',
+//   port: 5432,
+// });
+
 let db_name = "first_login"
 
 pool.connect()
@@ -45,6 +55,18 @@ const login = (body) => {
         // console.log("not work")
         reject(e)
       }
+      // bcrypt.hash(preHashPassword, results.rows[0].salt, function(err, hash) {
+      //   //hash stores user entered hashed password
+      //   if(hash==results.rows[0].password){
+      //     resolve("successful")
+      //   }
+      //   else{
+      //     //console.log("not correct password")
+      //     reject("Incorrect Password")
+      //   }
+      // })
+      //resolve(results);
+      //resolve(results.rows);
     })
   }) 
 }
@@ -76,13 +98,13 @@ const getUserByUsername = (body) => {
 const register = (body) => {
   //store user into database with unique salt to test for password in login
   return new Promise( async function(resolve, reject) {
-    let {username, password, email} = body;
+    let username = body.username;
+    let password = body.password;
     const saltRounds = 10;
     try{
       const hashedPassword = await bcrypt.hash(password, saltRounds)
-      pool.query('INSERT INTO ' + db_name + ' (username, password, email) VALUES ($1, $2, $3) RETURNING *', [username, hashedPassword, email], (error, results) => {
+      pool.query('INSERT INTO ' + db_name + ' (username, password) VALUES ($1, $2) RETURNING *', [username, hashedPassword], (error, results) => {
         if(error){
-          console.log(error)
           reject(error)
         }
         else{
@@ -92,41 +114,38 @@ const register = (body) => {
     } catch (err) {
       reject (err)
     }
+    // salt = await bcrypt.genSalt(saltRounds, async function(err, salt){
+
+    //   bcrypt.hash(password, salt, async function(err, hash) {
+    //     await pool.query('INSERT INTO ' + db_name+ ' (username, password, salt) VALUES ($1, $2, $3) RETURNING *', [username, hash, salt], (error, results) => {
+    //       if (error) {
+    //         reject(error)
+    //         return error
+    //       }
+    //       else{
+    //         resolve(results)
+    //         return results
+    //       }
+    //     })
+    //   })
+    // })
   })
 }
 
 
-const edit = (body) => {
+const edit = (ssn_passed) => {
   return new Promise(function(resolve, reject) {
-    const PK = body;
-    console.log("username we are trying to delete: "+ PK);
-    pool.query('DELETE FROM first_users WHERE ssn = $1', [PK], (error, results) => {
+    const ssn = ssn_passed;
+    console.log("username we are trying to delete: "+ ssn);
+    pool.query('DELETE FROM first_users WHERE ssn = $1', [ssn], (error, results) => {
+      console.log(error);
       if (error) {
-        console.log(error);
         reject(error)
       }
-      resolve(`Merchant deleted with username: ${PK}`)
+      resolve(`Merchant deleted with username: ${ssn}`)
     })
   })
 }
-
-async function test(){
-  try{
-    // await register( {
-    //   username: "test",
-    //   password: "test",
-    //   email: "test",
-    // })
-
-    let what = await getUserByUsername({username: "test"})
-    console.log(what);
-  } catch (e) {
-    console.log("caught error")
-    console.log(e)
-  }
-}
-
-// test()
   
   module.exports = {
     login,
