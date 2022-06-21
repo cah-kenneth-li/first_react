@@ -7,7 +7,7 @@ const { getAllUsers } = require('./user_database')
 function initialize(passport){
     const authenticateUser = async (username, password, done) => {
         try{
-            console.log("got here")
+            // console.log("got here")
             const user = await getUserByUsername(username)
             // console.log(user)
             // console.log(user.username)
@@ -20,6 +20,7 @@ function initialize(passport){
 
             if (await bcrypt.compare(password, user.password)){
                 // console.log(user)
+                // res.cookie('username', username)
                 return done(null, user)
             } else{
                 // console.log("password incorrect")

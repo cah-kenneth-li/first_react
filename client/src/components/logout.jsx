@@ -1,18 +1,10 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import Cookies from 'js-cookie';
 
-export default function Login(){
+export default function Logout(){
     console.log('login.jsx loaded')
 
-    const [message, setMessage] = useState("");
-
-
-    
-    useEffect( () => {
-        setMessage(Cookies.get('message'))
-    }, [])
-
+    test()
     return(
         // <div className="container">
         //     <div className="form-group">
@@ -28,9 +20,7 @@ export default function Login(){
         //      <button type="submit" onClick={() => test()} className="btn btn-primary"> Log In </button>
 
         // </div>
-    <div className="container text-center card" id="loginform">
-        <h2 className="text-center mb-4">Log In</h2>
-        
+    <div className="container" id="loginform">
         <form action="http://localhost:3001/login" method="POST">
             <div className="form-group">
                 <label htmlFor="username"> Username: </label>
@@ -46,39 +36,31 @@ export default function Login(){
             <button type="submit" className="btn btn-primary"> Log In </button>
         </form>
         {/* add in the danger text */}
-        <p className="text-danger"> {message} </p>
+        <p className="text-danger"> {} </p>
     </div>
 
     );
 }
 
-// function test(body) {
-//     let username = document.getElementById("username").value;
-//     console.log(username);
+function test(body) {
+    //let {username, password} = body;
+    fetch("http://localhost:3001/logout", {
+        method: "DELETE",
+        // redirect: 'follow',
+        body: {},
 
-//     let password = document.getElementById("password").value;
-//     console.log(password);
-
-//     //let {username, password} = body;
-//     fetch("http://localhost:3001/login", {
-//         method: "POST",
-//         // redirect: 'follow',
-//         body: JSON.stringify({
-//             username: username,
-//             password: password
-//         }),
-
-//         credentials: 'include', 
-//     }).then(response => {
-//         console.log("This is the response returned:")
-//         console.log(response)
-//         //redirects according to response of the fetch request
-//         if(response.redirected){
-//             // window.location.href = response.url;
-//         }
+        // credentials: 'include', 
+    }).then(response => {
+        console.log("This is the response returned:")
+        console.log(response)
+        //redirects according to response of the fetch request
+        if(response.redirected){
+            Cookies.clearCookie("loggedin")
+            window.location.href = response.url;
+        }
         
         
-//     }).catch(function(err) {
-//         console.log(err)
-//     })
-// }
+    }).catch(function(err) {
+        console.log(err)
+    })
+}

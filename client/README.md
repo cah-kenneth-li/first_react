@@ -3,6 +3,7 @@
 ## npx create-react-app
 ## npm i react-router-dom
 ## npm i js-cookie
+## npm i method-override
 
 # website used: https://www.techomoro.com/how-to-create-a-multi-page-website-with-react-in-5-minutes/
 

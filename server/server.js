@@ -40,6 +40,9 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
 
+  // res.header('Access-Control-Allow-Origin', '*');
+
+
   //these prevent back arrowing into sensitive fields once logged out
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   res.header('Expires', '-1');
@@ -60,12 +63,13 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
   // console.log(req.session.messages)
   // console.log(req.session.messages.length)
   res.cookie('message', req.session.messages.pop())
+  res.cookie('loggedin', false)
   res.redirect('http://localhost:3000/login')
 })
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: 'http://localhost:3001/login',
+  failureRedirect: 'http://localhost:3000/login',
   failureFlash: true,
   failureMessage: true,
 }))
@@ -77,7 +81,10 @@ app.get('/', checkAuthenticated, async (req, res) => {
       // console.log(req.user.username)
       // console.log("end of app comments")
       // main page once logged in
-      res.redirect('http://localhost:3000/about')
+      res.cookie('loggedin', true)
+      res.cookie('username', req.session.passport.user)
+      console.log(req.session)
+      res.redirect('http://localhost:3000/home')
       // res.render('data/home', {username: req.user.username})
     } catch (e) {
       next()
@@ -88,13 +95,15 @@ app.get('/', checkAuthenticated, async (req, res) => {
 
 app.delete('/logout', (req, res, next) => {
   //logout function now async, needs a next call
+  // console.log("logout called")
   req.logOut(function (err) {
     if (err) {
       console.log(err)
       return next(err);
     }
-
-    res.redirect('/login')
+    res.cookie('loggedin', false)
+    res.cookie('username', '')
+    res.redirect('http://localhost:3000/login')
   })
 })
 
@@ -117,7 +126,7 @@ function checkAuthenticated(req, res, next) {
     return next()
   }
 
-  res.redirect('/login')
+  res.redirect('http://localhost:3000/login')
 }
 
 function checkNotAuthenticated(req, res, next) {
@@ -125,7 +134,7 @@ function checkNotAuthenticated(req, res, next) {
 
   if (req.isAuthenticated()) {
     // console.log("is authenticated from check if not function")
-    return res.redirect('http://localhost:3000/about')
+    return res.redirect('http://localhost:3000/home')
   }
   next()
 }

@@ -113,22 +113,29 @@ router.post('/userlogin', checkAuthenticated, async (req, res) => {
     }
 })
 
-router.get('/registerForm', checkAuthenticated, (req, res) => {
+router.get('/registerForm', (req, res) => {
     //loads register form
     res.render('./data/register', {})
 })
 
-router.post('/register', checkAuthenticated, async (req, res) => {
+router.post('/register', async (req, res) => {
     //puts register form data in database
     let username = req.body.username;
     let password = req.body.password;
+    let email = req.body.email;
+
+    console.log("in register in data router")
     try{
-        let result = await login_connect.register({username: username, password: password})
+        let result = await login_connect.register({username: username, password: password, email: email})
         //console.log("WHY IS IT NOT WAITING "+result)
-        res.render('./data/register', {success: "Successfully Registered", username: username})
+        res.cookie('success', 'Successfully Registered')
+        res.redirect('http://localhost:3000/register')
+        // res.render('./data/register', {success: "Successfully Registered", username: username})
     } catch(e){
         console.log(e)
-        res.render('./data/register', {failure: "Could not register", username: username, error: e})
+        res.cookie('failure', e)
+        res.redirect('http://localhost:3000/register')
+        // res.render('./data/register', {failure: "Could not register", username: username, error: e})
 
     }
     // let result = await login_connect.register({username: username, password: password})
@@ -142,15 +149,28 @@ router.post('/register', checkAuthenticated, async (req, res) => {
 
 })
 
-function checkAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
-        return next()
+function checkAuthenticated(req, res, next) {
+    // console.log("checking if authenticated")
+    if (req.isAuthenticated()) {
+      // console.log("This session is authenticated in server.js")
+      return next()
     }
-    //if not logged in, redirect to login page
-    res.redirect('/login')
+  
+    res.redirect('http://localhost:3000/login')
+  }
+
+  function checkNotAuthenticated(req, res, next) {
+    // console.log("checkNotAuthenticated()")
+  
+    if (req.isAuthenticated()) {
+      // console.log("is authenticated from check if not function")
+      return res.redirect('http://localhost:3000/home')
+    }
+    next()
 }
 
 async function getUserByUsername(username){
 
 }
+
 module.exports = router

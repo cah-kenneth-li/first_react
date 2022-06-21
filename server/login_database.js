@@ -82,7 +82,7 @@ const register = (body) => {
       const hashedPassword = await bcrypt.hash(password, saltRounds)
       pool.query('INSERT INTO ' + db_name + ' (username, password, email) VALUES ($1, $2, $3) RETURNING *', [username, hashedPassword, email], (error, results) => {
         if(error){
-          console.log(error)
+          console.log("login database register: " + error)
           reject(error)
         }
         else{
