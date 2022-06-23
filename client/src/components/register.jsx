@@ -11,6 +11,8 @@ export default function Register(){
     useEffect( () => {
         setSuccess(Cookies.get('success'))
         setFailure(Cookies.get('failure'))
+        Cookies.remove('success')
+        Cookies.remove('failure')
     }, [])
 
     return(

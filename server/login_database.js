@@ -18,7 +18,6 @@ const login = (body) => {
     
     let username = body.username;
     let preHashPassword = body.password;
-    // console.log(db_name)
     let data = pool.query('SELECT * FROM '+db_name+' WHERE username = $1', [username], (error, results) => {
       // console.log(results)
       // console.log(results.rows[0])
@@ -56,7 +55,8 @@ const getPass = (body) => {
 const getUserByUsername = (body) => {
   return new Promise( async function(resolve, reject) {
     let username = body.username;
-    let data = await pool.query('SELECT * FROM '+db_name+' WHERE username = $1', [username], (error, results) => {
+    // console.log(username);
+    let data = pool.query('SELECT * FROM '+db_name+' WHERE username = $1', [username], (error, results) => {
       if(error){
         reject(error)
       }
@@ -66,6 +66,8 @@ const getUserByUsername = (body) => {
         reject(null);
       }
       else{
+        // console.log(results)
+        // console.log(results.rows[0])
         resolve(results.rows[0]);
       }
 

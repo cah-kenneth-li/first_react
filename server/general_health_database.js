@@ -8,7 +8,8 @@ const pool = new Pool({
 });
 
 //handles adding, getting, and querying information from users database
-let db_name = "first_patient"
+let db_name = "general_health"
+let file_name = "general_health_database"
 
 pool.connect()
 
@@ -28,11 +29,11 @@ const getAllUsers = () => {
     }) 
   }
 
-
-const addUser = (body) => {
+//updated
+const addRecord = (body) => {
   return new Promise( function(resolve, reject) {
-    const { firstName, lastName, dob, login_id, etheriumAddress } = body
-    pool.query('INSERT INTO public.' +db_name+ ' ("firstName", "lastName", dob, login_id, "etheriumAddress") VALUES ($1, $2, $3, $4, $5) RETURNING *', [firstName, lastName, dob, login_id, etheriumAddress], (error, results) => {
+    const { patient_id, bloodPressure, bmi, height, weight, ethnicity } = body
+    pool.query('INSERT INTO public.' +db_name+ ' (patient_id, "bloodPressure", bmi, height, weight, ethnicity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [patient_id, bloodPressure, bmi, height, weight, ethnicity], (error, results) => {
       if (error) {
         reject(error)
       }
@@ -42,7 +43,7 @@ const addUser = (body) => {
       // console.log(results===null)
 
       if(results==null){
-        console.log("should be reject")
+        console.log(file_name + " should be reject")
         reject("Already added")
       }
       else{
@@ -67,11 +68,12 @@ const addUser = (body) => {
     })
   }
 
+  //updated
   const getUser = (body) => {
     return new Promise(function (resolve, reject) {
       const  { PK } = body
       // console.log("PK: "+ PK)
-      pool.query('SELECT * FROM ' + db_name + ' WHERE login_id = $1', [PK], (error, results) => {
+      pool.query('SELECT * FROM ' + db_name + ' WHERE patient_id = $1', [PK], (error, results) => {
         if(error) {
           console.log("User database getUser error: " + error)
           reject(error)
@@ -105,7 +107,7 @@ async function test(){
 
   module.exports = {
     getAllUsers,
-    addUser,
+    addRecord,
     deleteUser,
     getUser,
   }

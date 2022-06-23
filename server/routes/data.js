@@ -1,10 +1,16 @@
 const express = require('express')
 const database_connect = require('./../user_database')
 const login_connect = require('./../login_database')
+const general_health_connect = require('./../login_database')
 const passport = require('passport')
 const router = express.Router()
+const bodyParser = require('body-parser')
+
 
 const initializePassport = require('./../passport-config')
+
+let jsonParser = bodyParser.json()
+let urlencodedParser = bodyParser.urlencoded({extended: false})
 
 //this router will use 'data'
 
@@ -33,42 +39,37 @@ router.get('./:id', (req, res) => {
     res.send(req.params.id)
 })
 
-router.post('/adder', checkAuthenticated, async (req, res) => {
+router.post('/patientRegister', checkAuthenticated, async (req, res) => {
     //once form in /views/data/new.ejs is completed, use this
     //function to actually add to users database
 
-    //in form, ssn is 3 different fields
-    let ssn1 = req.body.ssn;
-    let ssn2 = req.body.ssn2;
-    let ssn3 = req.body.ssn3;
-    //combining into one ssn
-    let ssn = ssn1+ssn2+ssn3;
-    console.log("ssn: " + ssn)
-
     //input to be added to database
     const person = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        ssn: ssn,
-        age: req.body.age,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        dob: req.body.dob,
+        login_id: req.body.login_id,
+        etheriumAddress: req.body.ethAddress,
     }
     //let newUser = {first_name: req.body.first_name, req.body.last_name, req.body.email, ssn, age}
     
     try{
         // console.log("got here")
-        await database_connect.addUser(person).then(response => {
+        let data = await database_connect.addUser(person).then(response => {
+            
             // console.log("this never completes for some reason")
-            res.redirect('/')
+            res.redirect("http://localhost:3000/patientRegister")
         })
         //console.log("successfully added!")
         //res.render('/data/index')
         //res.redirect(`/data/${person.id}`)
     } catch(e){
-        console.log("this failed in data router/adder, reason: ")
+        console.log("this failed in data router/patientRegister, reason: ")
         console.log(e)
+        res.cookie("failure", "Could Not Register")
         //res.redirect('/')
-        res.render('./data/new', {person: person})
+        // res.render('./data/new', {person: person})
+        res.redirect("http://localhost:3000/patientRegister")
     }
     //res.redirect('/')
 })
@@ -147,6 +148,54 @@ router.post('/register', async (req, res) => {
     //     res.render('./data/register', {failure: "Could not register", username: username})
     // }
 
+})
+
+router.post("/getMyHealth", async (req, res) => {
+    try{
+        let login_id = req.body.login_id;
+        console.log(login_id)
+        console.log(req.body)
+        let data = await database_connect.getUser({PK: login_id})
+
+        res.send(data)
+    } catch (e) {
+        console.log("/getmyhealth error: " +e)
+        res.send({message: "Something went wrong"})
+    }
+})
+
+router.post("/generalHealthRegister", async (req, res) => {
+    try{
+        let {systolicBloodPressure, diastolicBloodPressure, bmi, height, weight, ethnicity, patient_id} = req.body;
+        // let systolicBloodPressure = req.body.systolicBloodPressure;
+        // let diastolicBloodPressure = req.body.diastolicBloodPressure;
+        // let bmi = req.body.bmi;
+        // let height = req.body.height;
+        // let weight = req.body.weight;
+        // let ethnicity = req.body.ethnicity;
+        // let patient_id = req.body.patient_id;
+        console.log(login_id)
+        console.log(req.body)
+
+        let bloodPressure = systolicBloodPressure + "/" + diastolicBloodPressure;
+
+        let data = {
+            bloodPressure: bloodPressure,
+            bmi: bmi,
+            height: height,
+            weight: weight,
+            ethnicity: ethnicity,
+            patient_id: patient_id,
+        }
+        let result = await general_health_connect.addRecord(data)
+        res.cookie("success", "Successfully Added health record")
+        res.cookie("general_health_id", result.general_health_id)
+        res.redirect('http://localhost:3000/generalHealthRegister')
+    } catch (e) {
+        console.log("/generalHealthRegister error: " +e)
+        res.cookie("failure", )
+        res.redirect('http://localhost:3000/generalHealthRegister')
+    }
 })
 
 function checkAuthenticated(req, res, next) {

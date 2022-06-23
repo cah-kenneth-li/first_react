@@ -5,17 +5,28 @@ import Cookies from 'js-cookie';
 export default function PatientRegister(){
     const [success, setSuccess] = useState("");
     const [failure, setFailure] = useState("");
+    const [login_id, setlogin_id] = useState("")
+    const [username, setUsername] = useState(Cookies.get('username'));;
 
 
     
     useEffect( () => {
+        setUsername(Cookies.get('username'))
+
+      if(typeof username === 'undefined' || username===''){
+        window.location.href = "http://localhost:3000/login";
+      }
+
         setSuccess(Cookies.get('success'))
         setFailure(Cookies.get('failure'))
+        setlogin_id(Cookies.get('login_id'))
+        Cookies.remove('success')
+        Cookies.remove('failure')
     }, [])
 
     return(
         <div className="container">
-            <form action="http://localhost:3001/data/register" method="POST">
+            <form action="http://localhost:3001/data/patientRegister" method="POST">
                 
                 <div className="form-group">
                     <label htmlFor="firstName"> First Name: </label>
@@ -23,13 +34,8 @@ export default function PatientRegister(){
                 </div>
 
                 <div class="form-group">
-                    <label for="email"> Last Name: </label>
-                    <input required type="lastName" name = "lastName" id="lastName" class="form-control"/>
-                </div>
-                
-                <div className="form-group">
-                    <label htmlFor="password"> Password: </label>
-                    <input required type="text" name = "password" id="password" className="form-control"/>
+                    <label htmlFor="lastName"> Last Name: </label>
+                    <input required type="text" name = "lastName" id="lastName" class="form-control"/>
                 </div>
 
                 <div className="form-group">
@@ -38,14 +44,17 @@ export default function PatientRegister(){
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="ethAddress"> Password: </label>
+                    <label htmlFor="ethAddress"> Etherium Address: </label>
                     <input required type="text" name = "ethAddress" id="ethAddress" className="form-control"/>
                 </div>
 
-                <a href="/register" className="btn btn-secondary"> Cancel </a>
+                <input type="hidden" id="login_id" name="login_id" value={login_id}/>
+            
+                <a href="/home" className="btn btn-secondary"> Cancel </a>
                 <button type="submit" className="btn btn-primary"> Register </button>
             </form>
 
+            {/* <p>{login_id}</p> */}
             <p className="text-success"> {success} </p>
             <p className="text-danger"> {failure} </p>
         </div>

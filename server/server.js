@@ -10,10 +10,12 @@ const express = require('express');
 const app = express()
 const port = 3001
 const dataRouter = require('./routes/data')
-const database_connect = require('./user_database')
+const user_connect = require('./user_database')
 const session = require('express-session')
 const passport = require('passport')
 const flash = require('express-flash')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override')
 const initializePassport = require('./passport-config')
 const login_connect = require('./login_database')
@@ -23,6 +25,7 @@ initializePassport(passport)
 
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
+app.use(cookieParser())
 app.use(flash())
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -40,7 +43,7 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
 
-  // res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', '*');
 
 
   //these prevent back arrowing into sensitive fields once logged out
@@ -49,6 +52,11 @@ app.use(function (req, res, next) {
   res.header('Pragma', 'no-cache');
 
   res.header("Access-Control-Allow-Credentials", 'true');
+
+  res.set({
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+})
 
   next();
 });
@@ -83,13 +91,18 @@ app.get('/', checkAuthenticated, async (req, res) => {
       // main page once logged in
       res.cookie('loggedin', true)
       res.cookie('username', req.session.passport.user)
-      console.log(req.session)
+      let test = await login_connect.getUserByUsername({username: req.session.passport.user})
+      res.cookie("login_id", test.login_id)
+
+      let patient_data = await user_connect.getUser({PK: test.login_id})
+      res.cookie("patient_id", patient_data.patient_id)
+      // console.log(req.session)
       res.redirect('http://localhost:3000/home')
       // res.render('data/home', {username: req.user.username})
     } catch (e) {
-      next()
       console.log(e)
       console.log("primary app / error: " + e)
+      res.redirect('http://localhost:3000/home')
     }
   })
 
@@ -101,15 +114,21 @@ app.delete('/logout', (req, res, next) => {
       console.log(err)
       return next(err);
     }
-    res.cookie('loggedin', false)
-    res.cookie('username', '')
+    // console.log("cookies in req:")
+    // console.log(req.cookies)
+    // res.cookie('loggedin', false)
+    // res.cookie('username', '')
+    let cookiesToClear = req.cookies;
+    for(let key in cookiesToClear){
+      res.clearCookie(key)
+    }
     res.redirect('http://localhost:3000/login')
   })
 })
 
 app.get('/allData', checkAuthenticated, async (req, res) => {
   //displays all current information in user database
-  const allData = await database_connect.getAllUsers()
+  const allData = await user_connect.getAllUsers()
   res.render('data/index', {data: allData})
 })
 

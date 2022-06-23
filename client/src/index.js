@@ -15,6 +15,8 @@ import {
   Register,
   Logout,
   PatientRegister,
+  MyHealth,
+  GeneralHealthRegister,
 } from "./components";
 
 console.log("index.js")
@@ -43,8 +45,10 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/myHealth" element={<MyHealth />} />
         <Route path="/patientRegister" element={<PatientRegister />} />
-        <Route path="*" element={<About />}/>
+        <Route path="/generalHealthRegister" element={<GeneralHealthRegister />} />
+        <Route path="*" element={<Login />}/>
       </Routes>
       <Footer />
   </Router>
