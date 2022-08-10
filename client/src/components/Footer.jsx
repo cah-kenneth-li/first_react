@@ -1,6 +1,7 @@
 import React from "react";
 
 function Footer() {
+  let test = "hi";
   return (
     <div className="footer">
       <footer className="py-5 bg-dark fixed-bottom">

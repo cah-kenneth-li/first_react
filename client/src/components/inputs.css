@@ -1,0 +1,8 @@
+.input-group-addon{
+    color:black;
+    background-color: #ffffff;
+    display:flex;
+    outline-style: solid;
+
+    padding: 0 0px 0 0px;
+}

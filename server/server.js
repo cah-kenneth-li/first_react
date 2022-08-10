@@ -8,9 +8,12 @@ if(process.env.NODE_ENV !== 'production'){
 //login_database and user_database are for logging in and registering information on users respectively
 const express = require('express');
 const app = express()
+const cors = require('cors');
 const port = 3001
 const dataRouter = require('./routes/data')
+const scRouter = require('./routes/sc')
 const user_connect = require('./user_database')
+const general_health_connect = require('./general_health_database')
 const session = require('express-session')
 const passport = require('passport')
 const flash = require('express-flash')
@@ -35,6 +38,7 @@ app.use(session({
 app.use(methodOverride('_method'))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(cors())
 app.set('view engine', 'ejs')
 
 app.use(function (req, res, next) {
@@ -95,7 +99,13 @@ app.get('/', checkAuthenticated, async (req, res) => {
       res.cookie("login_id", test.login_id)
 
       let patient_data = await user_connect.getUser({PK: test.login_id})
-      res.cookie("patient_id", patient_data.patient_id)
+      let patient_id = patient_data.patient_id;
+      res.cookie("patient_id", patient_id)
+
+      let general_health_data = await general_health_connect.getUser({PK: patient_id})
+      if(typeof general_health_data !== undefined){
+        res.cookie("general_health_id", general_health_data.general_health_id)
+      }
       // console.log(req.session)
       res.redirect('http://localhost:3000/home')
       // res.render('data/home', {username: req.user.username})
@@ -137,6 +147,7 @@ app.listen(port, () => {
 })
 
 app.use('/data', dataRouter)
+app.use('/sc', scRouter)
 
 function checkAuthenticated(req, res, next) {
   // console.log("checking if authenticated")

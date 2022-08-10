@@ -1,8 +1,25 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Cookies from 'js-cookie';
+// import Web3 from 'web3';
 
-export default function GeneralHealthRegister(){
+export default function DataRequest(){
+
+    window.addEventListener('load', function() {
+
+        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+        if (typeof web3 !== 'undefined') {
+          // Use Mist/MetaMask's provider
+        //   web3js = new Web3(Web3.currentProvider);
+        } else {
+          // Handle the case where the user doesn't have web3. Probably
+          // show them a message telling them to install Metamask in
+          // order to use our app.
+          console.log("What");
+        }
+      })
+
+
     const [success, setSuccess] = useState("");
     const [failure, setFailure] = useState("");
     const [login_id, setlogin_id] = useState(Cookies.get('login_id'))
@@ -10,7 +27,6 @@ export default function GeneralHealthRegister(){
     const [username, setUsername] = useState(Cookies.get('username'));;
 
 
-    
     useEffect( () => {
         setUsername(Cookies.get('username'))
 
@@ -25,13 +41,14 @@ export default function GeneralHealthRegister(){
         Cookies.remove('failure')
     }, [])
 
+    // let { id, number, general, fields, constraints } = req.body;
     return(
         <div className="container">
-            <form action="http://localhost:3001/data/generalHealthRegister" method="POST">
+            <form action="http://localhost:3001/data/newRequest" method="POST">
                 
                 <div className="form-group">
-                    <label htmlFor="systolicBloodPressure"> Systolic Blood Pressure: </label>
-                    <input required type="text" name = "systolicBloodPressure" id="systolicBloodPressure" className="form-control"/>
+                    <label htmlFor="number"> Number of people requested: </label>
+                    <input required type="number" name = "number" id="number" className="form-control"/>
                 </div>
 
                 <div className="form-group">

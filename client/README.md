@@ -4,6 +4,9 @@
 ## npm i react-router-dom
 ## npm i js-cookie
 ## npm i method-override
+## npm i bootstrap react-bootstrap bootstrap-icons
+## npm i web3
+## npm install @mui/material @emotion/react @emotion/styled
 
 # website used: https://www.techomoro.com/how-to-create-a-multi-page-website-with-react-in-5-minutes/
 

@@ -1,6 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Form, Card, Alert, Button } from "react-bootstrap"
 // import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom"
 import Cookies from 'js-cookie';
 import './buttons.css'
 
@@ -31,10 +33,13 @@ export default function Home() {
 
   return (
     <>
+    <Card>
     <div className="container" id="loginTrue">
-            <h1 className="mb-4"> Welcome to the prototype {username} </h1>
+            <h1 className="mb-4"> Welcome to the prototype: {username} </h1>
             <br/>
-            <a href="/patientRegister" className="btn-lg test-button btn btn-success"> Register Patient</a>
+            <a href="/myWallet" className="btn-lg test-button btn btn-success"> My Wallet (to be added) </a>
+            <br/>
+            <a href="/patientRegister" className="btn-lg test-button btn btn-success "> Register Patient</a>
             <br/>
             <a href="/data/delete" className="btn-lg test-button btn btn-success"> Delete Data</a>
             <br/>
@@ -45,6 +50,11 @@ export default function Home() {
             <a href="/data/allMeds" className="btn-lg test-button btn btn-success"> Medication (to be added)</a>
             <br/>
             <a href="/myHealth" className="btn-lg test-button btn btn-success"> Health History / Diagnosis </a>    
+            <br/>
+
+            <a href="/dataRequest" className="btn-lg test-button btn btn-success"> Data Request </a>    
+            <br/>
+            <a href="/listRequest" className="btn-lg test-button btn btn-success"> List All Requests </a>    
             <br/>            
             {/* <form action="/logout?_method=DELETE" method="POST">
                 <button class="btn-lg test-button test-danger-button btn btn-danger" type="submit"> Log Out </button>
@@ -53,9 +63,10 @@ export default function Home() {
             <form action="http://localhost:3001/logout?_method=DELETE" method="POST">
                 <button className="btn-lg test-button test-danger-button btn btn-danger" type="submit"> Log Out </button>
             </form>
-            <p> {login_id} </p>
-            <p> {patient_id} </p>
+            {/* <p> {login_id} </p> */}
+            {/* <p> {patient_id} </p> */}
         </div>
+    </Card>
         </>
   );
 }

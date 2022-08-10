@@ -8,3 +8,5 @@ export { default as Logout } from "./logout";
 export { default as PatientRegister } from "./patientRegister";
 export { default as MyHealth } from "./myHealth";
 export { default as GeneralHealthRegister } from "./generalHealthRegister";
+export { default as DataRequest } from "./dataRequest";
+export { default as ListRequest } from "./listRequest";

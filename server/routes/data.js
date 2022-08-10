@@ -1,7 +1,8 @@
 const express = require('express')
 const database_connect = require('./../user_database')
 const login_connect = require('./../login_database')
-const general_health_connect = require('./../login_database')
+const general_health_connect = require('./../general_health_database')
+const request_connect = require('./../request_database')
 const passport = require('passport')
 const router = express.Router()
 const bodyParser = require('body-parser')
@@ -152,6 +153,19 @@ router.post('/register', async (req, res) => {
 
 router.post("/getMyHealth", async (req, res) => {
     try{
+        let PK = req.body.patient_id;
+        console.log(req.body)
+        let data = await general_health_connect.getUser({PK: PK})
+        console.log(data)
+        res.send(data)
+    } catch (e) {
+        console.log("/getmyhealth error: " +e)
+        res.send({message: "Something went wrong"})
+    }
+})
+
+router.post("/getMyPatient", async (req, res) => {
+    try{
         let login_id = req.body.login_id;
         console.log(login_id)
         console.log(req.body)
@@ -174,7 +188,6 @@ router.post("/generalHealthRegister", async (req, res) => {
         // let weight = req.body.weight;
         // let ethnicity = req.body.ethnicity;
         // let patient_id = req.body.patient_id;
-        console.log(login_id)
         console.log(req.body)
 
         let bloodPressure = systolicBloodPressure + "/" + diastolicBloodPressure;
@@ -188,13 +201,28 @@ router.post("/generalHealthRegister", async (req, res) => {
             patient_id: patient_id,
         }
         let result = await general_health_connect.addRecord(data)
-        res.cookie("success", "Successfully Added health record")
+        res.cookie("success", "Successfully added health record")
         res.cookie("general_health_id", result.general_health_id)
         res.redirect('http://localhost:3000/generalHealthRegister')
+
     } catch (e) {
         console.log("/generalHealthRegister error: " +e)
-        res.cookie("failure", )
+        console.log(e)
+        res.cookie("failure", e)
         res.redirect('http://localhost:3000/generalHealthRegister')
+    }
+})
+
+router.post("/newRequest", checkAuthenticated, async (req, res) => {
+    try{
+        let { id, number, general, fields, constraints } = req.body;
+        let result = await request_connect.addRequest(req.body);
+        res.cookie("success", "Successfully added health record")
+        res.redirect('http://localhost:3000/dataRequest')
+    } catch (e) {
+        console.log("./newRequest error: ")
+        console.log(e)
+        res.redirect('http://localhost:3000/dataRequest')
     }
 })
 

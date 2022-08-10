@@ -17,6 +17,8 @@ import {
   PatientRegister,
   MyHealth,
   GeneralHealthRegister,
+  DataRequest,
+  ListRequest,
 } from "./components";
 
 console.log("index.js")
@@ -48,6 +50,8 @@ root.render(
         <Route path="/myHealth" element={<MyHealth />} />
         <Route path="/patientRegister" element={<PatientRegister />} />
         <Route path="/generalHealthRegister" element={<GeneralHealthRegister />} />
+        {/* <Route path="/dataRequest" element={<DataRequest />} /> */}
+        <Route path="/listRequest" element={<ListRequest />} />
         <Route path="*" element={<Login />}/>
       </Routes>
       <Footer />
