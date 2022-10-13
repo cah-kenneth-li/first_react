@@ -11,7 +11,6 @@ export default function Navigation() {
   const linkRef = useRef();
   const [linkRefText, setLinkRefText] =useState("Log in");
 
-
   useEffect( () => {
     let status = Cookies.get("loggedin")
     setLogin(status)
@@ -41,7 +40,7 @@ export default function Navigation() {
     //   linkRef.to('/login')
     //   // linkRefText="Log in"
     //  )
-  }, [])
+  }, [login])//might need to be []
 
   
 

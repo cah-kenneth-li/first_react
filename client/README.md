@@ -7,6 +7,10 @@
 ## npm i bootstrap react-bootstrap bootstrap-icons
 ## npm i web3
 ## npm install @mui/material @emotion/react @emotion/styled
+## npm install @usedapp/core ethers
+## npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
+## npm i @coreui/react
+
 
 # website used: https://www.techomoro.com/how-to-create-a-multi-page-website-with-react-in-5-minutes/
 

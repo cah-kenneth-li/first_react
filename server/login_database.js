@@ -1,5 +1,6 @@
 const {Pool, Client} = require('pg')
 const bcrypt = require ('bcrypt');
+const fs = require('fs');
 const pool = new Pool({
   user: 'postgres',
   host: '10.49.216.178',
@@ -7,9 +8,31 @@ const pool = new Pool({
   password: '.eBRbM-$^*iTlMM"',
   port: 5432,
 });
+
+// const pool = new Pool({
+//   user:'postgres',
+//   host: '10.49.216.178',
+//   database: 'test',
+//   ssl: {
+//     rejectUnauthorized : false,
+//     ca   : fs.readFileSync("server-ca.pem").toString(),
+//     key  : fs.readFileSync("client-key.pem").toString(),
+//     cert : fs.readFileSync("client-cert.pem").toString(),
+//   }
+// });
+
 let db_name = "first_login"
 
 pool.connect()
+
+// pool.connect(err => {
+//   if (err) {
+//     console.error('error connecting', err.stack)
+//   } else {
+//     console.log('connected')
+//     pool.end()
+//   }
+// })
 
 const login = (body) => {
   return new Promise(function(resolve, reject) {

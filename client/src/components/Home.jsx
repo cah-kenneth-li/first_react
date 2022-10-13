@@ -1,16 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Form, Card, Alert, Button } from "react-bootstrap"
+// import { Form, Card, Alert, Button } from "react-bootstrap"
+import { Card } from "react-bootstrap"
 // import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 import Cookies from 'js-cookie';
 import './buttons.css'
 
 export default function Home() {
 
   const [username, setUsername] = useState(Cookies.get('username'));
-  const [login_id, setlogin_id] = useState(Cookies.get('login_id'))
-  const [patient_id, setpatient_id] = useState(Cookies.get('patient_id'))  
+  // const [login_id, setlogin_id] = useState(Cookies.get('login_id'))
+  // const [patient_id, setpatient_id] = useState(Cookies.get('patient_id'))  
   
   useEffect( () => {
       // console.log("in useeffect")

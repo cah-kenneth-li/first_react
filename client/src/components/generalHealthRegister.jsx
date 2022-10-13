@@ -1,13 +1,16 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Cookies from 'js-cookie';
+import { useHistory } from "react-router-dom";
+// import { AppBar, Toolbar, Box, Button, IconButton, Typography, Stack } from "@mui/material"
+
 
 export default function GeneralHealthRegister(){
     const [success, setSuccess] = useState("");
     const [failure, setFailure] = useState("");
-    const [login_id, setlogin_id] = useState(Cookies.get('login_id'))
-    const [patient_id, setpatient_id] = useState(Cookies.get('patient_id'))
-    const [username, setUsername] = useState(Cookies.get('username'));;
+    const [login_id, setlogin_id] = useState(Cookies.get('login_id'));
+    const [patient_id, setpatient_id] = useState(Cookies.get('patient_id'));
+    const [username, setUsername] = useState(Cookies.get('username'));
 
 
     
@@ -61,7 +64,7 @@ export default function GeneralHealthRegister(){
 
                 <input type="hidden" id="patient_id" name="patient_id" value={patient_id}/>
             
-                <a href="/home" className="btn btn-secondary"> Cancel </a>
+                <a href="/newHome" className="btn btn-secondary"> Cancel </a>
                 <button type="submit" className="btn btn-primary"> Register </button>
             </form>
 
